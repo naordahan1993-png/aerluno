@@ -1,69 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aerluno – Flight Search</title>
-  <style>
-    body {
-      margin: 0;
-      background: #0a0a0a;
-      font-family: Arial, sans-serif;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      width: 380px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 15px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 20px #4bf5ff88;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #4bf5ff;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-    }
-    button {
-      background: #4bf5ff;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aerluno — Flight Search</title>
+<style>
+  :root{
+    --bg:#050506;
+    --card:#0d0d0f;
+    --neon1:#9b4bff;
+    --neon2:#47f0ff;
+    --accent:#7b1cff;
+    --muted:#bbb;
+    --input:#0f0f12;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    background: radial-gradient(1000px 400px at 10% 10%, rgba(75,0,150,0.12), transparent),
+                radial-gradient(800px 300px at 90% 90%, rgba(0,220,220,0.06), transparent),
+                var(--bg);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px 16px;
+  }
+
+  /* card */
+  .card{
+    width:100%;
+    max-width:420px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px;
+    padding:28px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.6), 0 0 40px rgba(123,28,255,0.08);
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative;
+    overflow:visible;
+  }
+  /* glowing outline */
+  .card:before{
+    content:"";
+    position:absolute;
+    inset:-8px;
+    border-radius:22px;
+    background: linear-gradient(90deg,var(--neon1),var(--neon2));
+    filter:blur(18px);
+    opacity:0.18;
+    z-index:-1;
+  }
+
+  h1{
+    margin:0 0 18px 0;
+    font-size:28px;
+    letter-spacing:0.6px;
+    text-align:center;
+    background: linear-gradient(90deg,var(--neon1),var(--neon2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-weight:700;
+  }
+
+  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px 0;}
+
+  .input, .select, .btn {
+    width:100%;
+    box-sizing:border-box;
+    border-radius:14px;
+    padding:14px 16px;
+    outline:none;
+    border:2px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:#fff;
+    font-size:15px;
+    transition: box-shadow .15s, border-color .12s, transform .08s;
+  }
+  .input::placeholder { color: rgba(255,255,255,0.15); }
+  .input:focus, .select:focus{
+    border-color: rgba(155,75,255,0.9);
+    box-shadow: 0 6px 30px rgba(155,75,255,0.06), 0 0 18px rgba(71,240,255,0.02);
+    transform: translateY(-1px);
+  }
+
+  .row{display:flex;gap:12px;}
+  .row .half{flex:1;}
+
+  .btn{
+    margin-top:18px;
+    background: linear-gradient(90deg,var(--neon2),var(--neon1));
+    color:#051018;
+    font-weight:700;
+    border:0;
+    cursor:pointer;
+    box-shadow: 0 8px 30px rgba(123,28,255,0.18);
+    padding:14px;
+    font-size:16px;
+  }
+
+  .muted{color:var(--muted);font-size:13px;margin-top:8px;}
+
+  /* autocomplete dropdown */
+  .suggestions{
+    position:relative;
+  }
+  .list{
+    position:absolute;
+    left:0;
+    right:0;
+    top:calc(100% + 8px);
+    background: #08080a;
+    border-radius:10px;
+    max-height:210px;
+    overflow:auto;
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    z-index:40;
+  }
+  .item{
+    padding:10px 12px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    font-size:14px;
+    color:#ddd;
+  }
+  .item:hover{background:linear-gradient(90deg, rgba(123,28,255,0.06), rgba(71,240,255,0.02));}
+
+  .code{
+    font-weight:700;
+    color:var(--neon1);
+    margin-right:8px;
+  }
+
+  /* small screens */
+  @media (max-width:420px){
+    .card{padding:22px; border-radius:16px;}
+    h1{font-size:22px;}
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Aerluno</h1>
+  <div class="card" role="main">
+    <h1>Aerluno — Find Your Flight</h1>
 
-    <input type="text" placeholder="From (City or Airport)" />
-    <input type="text" placeholder="To (City or Airport)" />
+    <label for="from">From (city or airport)</label>
+    <div class="suggestions">
+      <input id="from" class="input" placeholder="JFK, TLV, LHR..." autocomplete="off" />
+      <div id="fromList" class="list" style="display:none"></div>
+    </div>
 
-    <label>Depart:</label>
-    <input type="date" />
+    <label for="to">To (city or airport)</label>
+    <div class="suggestions">
+      <input id="to" class="input" placeholder="LAX, CDG, DXB..." autocomplete="off" />
+      <div id="toList" class="list" style="display:none"></div>
+    </div>
 
-    <label>Return:</label>
-    <input type="date" />
+    <div class="row" style="margin-top:12px">
+      <div class="half">
+        <label for="depart">Depart</label>
+        <input id="depart" class="input" type="date" />
+      </div>
+      <div class="half">
+        <label for="return">Return</label>
+        <input id="return" class="input" type="date" />
+      </div>
+    </div>
 
-    <select>
+    <label for="passengers">Passengers</label>
+    <select id="passengers" class="select">
       <option>1 Passenger</option>
       <option>2 Passengers</option>
       <option>3 Passengers</option>
+      <option>4 Passengers</option>
+      <option>5 Passengers</option>
     </select>
 
-    <button>Search Flights</button>
+    <button id="searchBtn" class="btn">Search Flights</button>
+    <div id="output" class="muted" style="display:none"></div>
   </div>
+
+<script>
+/* small airport database for autocomplete (code — city — name) */
+const AIRPORTS = [
+  {code:'JFK', city:'New York', name:'John F. Kennedy International'},
+  {code:'EWR', city:'Newark', name:'Newark Liberty Int.'},
+  {code:'LGA', city:'New York', name:'LaGuardia'},
+  {code:'LAX', city:'Los Angeles', name:'Los Angeles Intl'},
+  {code:'SFO', city:'San Francisco', name:'San Francisco Intl'},
+  {code:'ORD', city:'Chicago', name:'O\'Hare Intl'},
+  {code:'DFW', city:'Dallas', name:'Dallas/Fort Worth Intl'},
+  {code:'MIA', city:'Miami', name:'Miami Intl'},
+  {code:'ATL', city:'Atlanta', name:'Hartsfield–Jackson Atlanta'},
+  {code:'TLV', city:'Tel Aviv', name:'Ben Gurion'},
+  {code:'LHR', city:'London', name:'Heathrow'},
+  {code:'CDG', city:'Paris', name:'Charles de Gaulle'},
+  {code:'DXB', city:'Dubai', name:'Dubai Intl'},
+  {code:'AMS', city:'Amsterdam', name:'Schiphol'},
+  {code:'BCN', city:'Barcelona', name:'El Prat'},
+  {code:'NRT', city:'Tokyo', name:'Narita'},
+  {code:'HND', city:'Tokyo', name:'Haneda'},
+  {code:'SIN', city:'Singapore', name:'Changi'},
+  {code:'MAD', city:'Madrid', name:'Adolfo Suárez Madrid–Barajas'}
+];
+
+function makeList(inputEl, listEl){
+  function showMatches(){
+    const val = inputEl.value.trim().toLowerCase();
+    if(!val){ listEl.style.display='none'; listEl.innerHTML=''; return; }
+    const matches = AIRPORTS.filter(a=>{
+      return a.code.toLowerCase().includes(val)
+        || a.city.toLowerCase().includes(val)
+        || a.name.toLowerCase().includes(val);
+    }).slice(0,8);
+    if(matches.length===0){ listEl.style.display='none'; listEl.innerHTML=''; return; }
+    listEl.innerHTML = matches.map(a => 
+      `<div class="item" data-code="${a.code}" data-city="${a.city}">
+         <div><span class="code">${a.code}</span> ${a.city}</div>
+         <div style="color:rgba(255,255,255,0.4);font-size:13px">${a.name}</div>
+       </div>`).join('');
+    listEl.style.display='block';
+  }
+  inputEl.addEventListener('input', showMatches);
+  inputEl.addEventListener('focus', showMatches);
+  inputEl.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ listEl.style.display='none'; }
+  });
+  listEl.addEventListener('click', (ev)=>{
+    const item = ev.target.closest('.item');
+    if(!item) return;
+    const code = item.getAttribute('data-code');
+    const city = item.getAttribute('data-city');
+    inputEl.value = `${code} — ${city}`;
+    listEl.style.display='none';
+  });
+  // click outside to close
+  document.addEventListener('click', (e)=>{
+    if(!inputEl.contains(e.target) && !listEl.contains(e.target)) listEl.style.display='none';
+  });
+}
+
+makeList(document.getElementById('from'), document.getElementById('fromList'));
+makeList(document.getElementById('to'), document.getElementById('toList'));
+
+document.getElementById('searchBtn').addEventListener('click', ()=>{
+  const from = document.getElementById('from').value.trim();
+  const to = document.getElementById('to').value.trim();
+  const depart = document.getElementById('depart').value;
+  const ret = document.getElementById('return').value;
+  const pax = document.getElementById('passengers').value;
+
+  if(!from || !to){
+    alert('Please enter both From and To (type airport code or city).');
+    return;
+  }
+  const q = { from, to, depart: depart || null, return: ret || null, pax };
+  // להדגמה: השאילתא מדפיסה בקונסול; כאן אפשר לקשר ל-API בעתיד
+  console.log('Search query:', q);
+
+  const out = document.getElementById('output');
+  out.style.display = 'block';
+  out.textContent = `Searching: ${from} → ${to}` + (depart ? ` depart ${depart}` : '') + (ret ? ` return ${ret}` : '') + ` — ${pax}`;
+  // אפקט לחצ/טעינה קצר
+  document.getElementById('searchBtn').textContent = 'Searching...';
+  document.getElementById('searchBtn').disabled = true;
+  setTimeout(()=>{
+    document.getElementById('searchBtn').textContent = 'Search Flights';
+    document.getElementById('searchBtn').disabled = false;
+    alert('Demo search finished — בדוק את הקונסול (F12) לראות את השאילתה.');
+  },1000);
+});
+</script>
 </body>
 </html>
