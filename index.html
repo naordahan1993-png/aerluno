@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aerluno – Flight Search</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 380px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 20px #4bf5ff88;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #4bf5ff;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #4bf5ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Aerluno</h1>
+
+    <input type="text" placeholder="From (City or Airport)" />
+    <input type="text" placeholder="To (City or Airport)" />
+
+    <label>Depart:</label>
+    <input type="date" />
+
+    <label>Return:</label>
+    <input type="date" />
+
+    <select>
+      <option>1 Passenger</option>
+      <option>2 Passengers</option>
+      <option>3 Passengers</option>
+    </select>
+
+    <button>Search Flights</button>
+  </div>
+</body>
+</html>
